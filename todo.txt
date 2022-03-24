@@ -1,0 +1,38 @@
+
+
+DATABASE:
+    - SQL(MYSQL)
+    Tables:
+        1) daily_logs
+            i) fields: routine_date_id(auto generated,PK), date(NOT NULL), routine_id;
+            ii) PK --> routine_date_id
+            iii) FK --> routine_id(FK from routines) 
+
+        2) routines
+            i) fields: routine_id(auto gen),routine_name,type;
+            ii) PK --> routine_id
+            iii) FK --> NONE
+
+        3) routine_date_exercises 
+            i) fields: r_d_e_id(AUTO GEN, routine_date_id(FK), routine_exercise_id(FK), sets, reps, weight;
+            ii) PK --> r_d_e_id
+            iii) FK --> routine_date_id(FK from r_d_id daily_logs), routine_exercise_id(FK from r_e_id from routine_exercises)
+
+        4) routine_exercises
+            i) fields: routine_exercise_id(AUTO_GEN), routineID(FK), exerciseID(FK),
+            ii) PK --> routine_exercise_id
+            iii) FK --> routineID(FK from workout_routines), exerciseID(FK from exercises)
+        5) exercises
+            i) fields: exercise_id(AUTO GEN), name
+            ii) PK --> exercise_id
+            iii) FK --> NONE
+
+
+BACKEND
+
+    1) REST API
+
+    2) GraphQL
+
+
+FRONTEND
