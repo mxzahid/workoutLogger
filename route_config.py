@@ -51,11 +51,11 @@ def home():
     ;
     ''')
     latestRoutine = cursor.fetchall()
-    routine = {'date': latestRoutine[0]['date'],
-               'name': latestRoutine[0]['routine_name'],
-               'type': latestRoutine[0]['type']
-               }
-    return render_template("home.html", routine=routine, latestRoutine=latestRoutine)
+    routineMD = {'date': latestRoutine[0]['date'],
+                 'name': latestRoutine[0]['routine_name'],
+                 'type': latestRoutine[0]['type']
+                 }
+    return render_template("home.html", routineMD=routineMD, latestRoutine=latestRoutine)
 
 
 @app.route('/api/workout_routines')
