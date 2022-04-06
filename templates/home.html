@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block workout_table %}
+
+<h2>Here's my latest workout: </h2><br>
+<h4>Date: {{ routine.date }}</h4>
+<h4>Routine: {{ routine.name }}</h4>
+{% if routine.type == "H" %}
+    <h4>Type: Heavy</h4>
+{% endif %}
+{% if routine.type == "V" %}
+    <h4>Type: Volume</h4>
+{% endif %}
+<br>
+<table>
+    <tr>
+        <th>Exercise</th>
+        <th> | </th>
+        <th>Sets</th>
+        <th> | </th>
+        <th>Reps</th>
+        <th> | </th>
+        <th>Weight(lbs)</th>
+    </tr>
+    {% for exercise in latestRoutine %}
+        <td>{{ exercise.name }}</td>
+        <td></td>
+        <td>{{ exercise.sets }}</td>
+        <td></td>
+        <td>{{ exercise.reps }}</td>
+        <td></td>
+        <td>{{ exercise.weight }}</td>
+    {% endfor %}
+</table>
+{% endblock workout_table %}

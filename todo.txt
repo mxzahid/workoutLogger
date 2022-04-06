@@ -23,16 +23,29 @@ DATABASE:
             ii) PK --> routine_exercise_id
             iii) FK --> routineID(FK from workout_routines), exerciseID(FK from exercises)
         5) exercises
-            i) fields: exercise_id(AUTO GEN), name
+            i) fields: exercise_id(AUTO GEN), name, defaultSets, defaultReps
             ii) PK --> exercise_id
             iii) FK --> NONE
 
+        ^^ rewrite sql file
+
 
 BACKEND
+    (remember to delete all trailing (last) "S" in exercise names, remove)
+    
+    1) figure out routes:
+        i) get all workout_routines w/ exercises
+        ii) get specific logs, or recent 3
+        iii) create new workout_routines w/ exercises
+        iv) add new logs
+        v) add new exercises
+        vi) edit existing routines (?)
 
-    1) REST API
+    2)
 
-    2) GraphQL
+     REST API
+
+     GraphQL
 
 
 FRONTEND
