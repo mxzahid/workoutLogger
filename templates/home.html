@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h2>Here's my latest workout: </h2><br>
+{% endblock header %}
+
+{% block workout_table %}
+
+
+<h4>Date: {{ routineMD.date }}</h4>
+<h4>Routine: {{ routineMD.name }}</h4>
+{% if routineMD.type == "H" %}
+    <h4>Type: Heavy</h4>
+{% endif %}
+{% if routineMD.type == "V" %}
+    <h4>Type: Volume</h4>
+{% endif %}
+<br>
+<table>
+    <tr>
+        <th>Exercise</th>
+        <th> | </th>
+        <th>Sets</th>
+        <th> | </th>
+        <th>Reps</th>
+        <th> | </th>
+        <th>Weight(lbs)</th>
+    </tr>
+    {% for exercise in latestRoutine %}
+        <tr>
+            <td>{{ exercise.name }}</td>
+            <td></td>
+            <td>{{ exercise.sets }}</td>
+            <td></td>
+            <td>{{ exercise.reps }}</td>
+            <td></td>
+            <td>{{ exercise.weight }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock workout_table %}
+
+{% block options %}
+    <h3> What would you like to do? </h3>
+    <button type="button" class="btn btn-primary">Add a new log</button>
+    <button type="button" class="btn btn-info">Get Logs</button>
+    <button type="button" class="btn btn-warning">View Routines</button>
+{% endblock options %}
