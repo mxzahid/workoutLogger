@@ -1,0 +1,41 @@
+{% extends "base.html "%}
+
+{% block header %}
+<h2>Here's all my routines: </h2><br>
+{% endblock header %}
+
+{% block workout_table %}
+{% for routine in routines%}
+    <p> {{ routine[0] }}
+
+    {% if routine[1] == "H" %}
+        - Heavy
+    {% endif %}
+    {% if routine[1] == "V" %}
+        - Volume
+    {% endif %}
+        
+    </p>
+    <table>
+        <tr>
+            <th>Exercise</th>
+            <th> | </th>
+            <th>Sets</th>
+            <th> | </th>
+            <th>Reps</th>
+        </tr>
+        {% for exercise in routines[routine] %}
+        <tr>
+            <td>{{ exercise[0] }}</td>
+            <td></td>
+            <td>{{ exercise[1] }}</td>
+            <td></td>
+            <td>{{ exercise[2] }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <br>
+    
+{% endfor %}
+{% endblock workout_table %}

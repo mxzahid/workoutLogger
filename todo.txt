@@ -19,7 +19,7 @@ DATABASE:
             iii) FK --> routine_date_id(FK from r_d_id daily_logs), routine_exercise_id(FK from r_e_id from routine_exercises)
 
         4) routine_exercises
-            i) fields: routine_exercise_id(AUTO_GEN), routineID(FK), exerciseID(FK),
+            i) fields: routine_exercise_id(AUTO_GEN), routineID(FK), exerciseID(FK), defaultSets, defaultReps
             ii) PK --> routine_exercise_id
             iii) FK --> routineID(FK from workout_routines), exerciseID(FK from exercises)
         5) exercises

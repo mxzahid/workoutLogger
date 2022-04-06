@@ -1,4 +1,3 @@
-from distutils.log import debug
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -18,9 +17,6 @@ mysql = MySQL(app)
 @app.before_request
 def before_request():
     print('before API request')
-
-# This method returns students
-# list and by default method will be GET
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -58,25 +54,34 @@ def home():
     return render_template("home.html", routineMD=routineMD, latestRoutine=latestRoutine)
 
 
-@app.route('/api/workout_routines')
+@app.route('/workout_routines', methods=['GET', 'POST'])
 def get_workout_routines_list():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('''
-    SELECT routines.routine_name, routines.type, exercises.name 
+    SELECT routines.routine_name, routines.type,
+    exercises.name, routine_exercises.default_sets,
+    routine_exercises.default_reps
     FROM routine_exercises
     JOIN exercises ON routine_exercises.exercise_id=exercises.exercise_id
     JOIN routines
 	ON routines.routine_id=routine_exercises.routine_id;''')
     allRoutines = cursor.fetchall()
-    print(allRoutines)
-    return allRoutines
+    routineNames = {}
+    for routine in allRoutines:
+        nameType = (routine['routine_name'], routine['type'])
+        if nameType not in routineNames.keys():
+            routineNames[nameType] = []
+        routineNames[nameType].append(
+            (routine['name'], routine['default_sets'], routine['default_reps']))
+
+    return render_template("routines.html", routines=routineNames)
 
 
-@app.route('/api/logs', methods=['GET'])
-def get_specified_logs():
-    x = request.form['numOfLogsRequested']
-    print("sjdkfhgkjsdfhglkjh")
-    print(x)
+# @app.route('/api/logs', methods=['GET'])
+# def get_specified_logs():
+#     x = request.form['numOfLogsRequested']
+#     print("sjdkfhgkjsdfhglkjh")
+#     print(x)
     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
     # cursor.execute('''
@@ -99,7 +104,7 @@ def get_specified_logs():
     # LIMIT ?
     # ;
     # ''', x)
-    return render_template('index.html')
+    # return render_template('index.html')
 
     #     # This is POST method which stores students details.
 
