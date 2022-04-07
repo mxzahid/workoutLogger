@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
-import re
+
 
 # app reference
 app = Flask(__name__)
@@ -11,7 +11,6 @@ app.config['MYSQL_PASSWORD'] = 'abdullah'
 app.config['MYSQL_DB'] = 'workoutlogs'
 
 mysql = MySQL(app)
-# This method executes before any API request
 
 
 @app.before_request
@@ -21,10 +20,8 @@ def before_request():
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    print('hello')
-
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('''
+    query = '''
     SELECT daily_logs.date,
     routines.routine_name,
     routines.type,
@@ -45,8 +42,11 @@ def home():
         SELECT MAX(daily_logs.routine_date_id) FROM daily_logs
     )
     ;
-    ''')
+    '''
+    cursor.execute(query)
     latestRoutine = cursor.fetchall()
+    global latestLogDate
+    latestLogDate = latestRoutine[0]['date']
     routineMD = {'date': latestRoutine[0]['date'],
                  'name': latestRoutine[0]['routine_name'],
                  'type': latestRoutine[0]['type']
@@ -77,41 +77,58 @@ def get_workout_routines_list():
     return render_template("routines.html", routines=routineNames)
 
 
-# @app.route('/api/logs', methods=['GET'])
-# def get_specified_logs():
-#     x = request.form['numOfLogsRequested']
-#     print("sjdkfhgkjsdfhglkjh")
-#     print(x)
-    # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+@app.route('/logs', methods=['GET'])
+def get_specified_logs():
+    return render_template('getLogs.html', maxDate=latestLogDate)
 
-    # cursor.execute('''
-    # SELECT daily_logs.date,
-    # routines.routine_name,
-    # routines.type,
-    # exercises.name,
-    # routine_date_exercise.sets,
-    # routine_date_exercise.reps,
-    # routine_date_exercise.weight
-    # FROM daily_logs
-    # JOIN routine_date_exercise
-    #     ON routine_date_exercise.routine_date_id=daily_logs.routine_date_id
-    # JOIN routine_exercises
-    #     ON routine_date_exercise.routine_exercise_id=routine_exercises.routine_exercise_id
-    # JOIN routines
-    #     ON routine_exercises.routine_id=routines.routine_id
-    # JOIN exercises
-    #     ON routine_exercises.exercise_id=exercises.exercise_id
-    # LIMIT ?
-    # ;
-    # ''', x)
-    # return render_template('index.html')
 
-    #     # This is POST method which stores students details.
+@app.route('/logsByDate', methods=['POST'])
+def get_log_by_date():
+    if request.method == 'POST':
+        oneLogDate = request.form.get('oneLogDate', None)
+        if(oneLogDate != None):
 
-    # @app.route('/api/new_entry', methods=['POST'])
-    # def store_student_data():
-    #     return "Student list[POST]"
-    # # This method executes after every API request.
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            query = '''
+            SELECT daily_logs.date,
+            routines.routine_name,
+            routines.type,
+            exercises.name,
+            routine_date_exercise.sets,
+            routine_date_exercise.reps,
+            routine_date_exercise.weight
+            FROM daily_logs
+            JOIN routine_date_exercise
+                ON routine_date_exercise.routine_date_id=daily_logs.routine_date_id
+            JOIN routine_exercises
+                ON routine_date_exercise.routine_exercise_id=routine_exercises.routine_exercise_id
+            JOIN routines
+                ON routine_exercises.routine_id=routines.routine_id
+            JOIN exercises
+                ON routine_exercises.exercise_id=exercises.exercise_id
+            WHERE daily_logs.date = '{}'
+            ;
+            '''.format(oneLogDate)
+            cursor.execute(query)
+            oneDateLog = cursor.fetchall()
+            oneDateLogMD = {'date': oneDateLog[0]['date'],
+                            'name': oneDateLog[0]['routine_name'],
+                            'type': oneDateLog[0]['type']
+                            }
+
+            return render_template('getLogs.html', maxDate=latestLogDate, oneDateLogMD=oneDateLogMD, oneDateLog=oneDateLog)
+    return render_template('getLogs.html', maxDate=latestLogDate)
+
+
+@app.route('/logsByNumber', methods=['POST'])
+def get_n_recent_logs():
+    if request.method == 'POST':
+        numberOfLogsReq = request.form.get('numberOfLogs', None)
+        if(numberOfLogsReq != None):
+            pass
+        return render_template('getLogs.html', maxDate=latestLogDate, n=numberOfLogsReq)
+
+    return render_template('getLogs.html', maxDate=latestLogDate)
 
 
 @app.after_request

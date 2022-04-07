@@ -16,28 +16,26 @@
     <h4>Type: Volume</h4>
 {% endif %}
 <br>
-<table>
-    <tr>
-        <th>Exercise</th>
-        <th> | </th>
-        <th>Sets</th>
-        <th> | </th>
-        <th>Reps</th>
-        <th> | </th>
-        <th>Weight(lbs)</th>
-    </tr>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Exercise</th>
+            <th>Sets</th>
+            <th>Reps</th>
+            <th>Weight(lbs)</th>
+        </tr>
+    </thead>
     {% for exercise in latestRoutine %}
         <tr>
             <td>{{ exercise.name }}</td>
-            <td></td>
             <td>{{ exercise.sets }}</td>
-            <td></td>
             <td>{{ exercise.reps }}</td>
-            <td></td>
             <td>{{ exercise.weight }}</td>
         </tr>
     {% endfor %}
 </table>
+
+
 {% endblock workout_table %}
 
 {% block options %}
@@ -45,6 +43,14 @@
     <a href="workout_routines">
         <button type="button" class="btn btn-warning">View Routines</button>
     </a>
-    <button type="button" class="btn btn-primary">Add a new log</button>
-    <button type="button" class="btn btn-info">Get Logs</button>
+    <br>
+    <br>
+    <a href="logs">
+        <button type="button" class="btn btn-info">Get Logs</button>
+    </a>
+    <br>
+    <br>
+    <a href="addLog">
+        <button type="button" class="btn btn-primary">Add a new log</button>
+    </a>
 {% endblock options %}

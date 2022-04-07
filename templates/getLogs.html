@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block header %}
+<br>
+<a href="/">
+    <button type="button" class="btn btn-primary">Home</button>
+</a><br>
+<br>
+<h2>Check out my workouts</h2>
+
+{% endblock header %}
+
+{% block midbody %}
+
+
+<div style='float:left'>
+    <form action="/logsByDate" method="post" >
+        <label for="oneLogDate">Get Log by Date:</label><br>
+        <input type="date" 
+            id="specificLogDate" 
+            name="oneLogDate" 
+            min="2022-03-23"
+            max=""
+            value=""><br>
+        <input type="submit" value="getLogs" class="btn btn-primary">
+    </form>
+</div>
+
+<div style="width:50%; margin:auto;">
+    <div style="display:inline-block; width:45%;text-align:left;">
+    <form action="/logsByNumber" method="post" >
+        <label for="numberOfLogs">How many logs?(limit 5)</label><br>
+        <input type="text" 
+            id="numberOfLogs" 
+            name="numberOfLogs" 
+            min="1"
+            max="5"
+            value=""><br>
+        <input type="submit" value="getLogs" class="btn btn-primary">
+    </form>
+</div>
+</div>
+
+
+<script>
+    console.log('{{ maxDate }}')
+    document.getElementById('specificLogDate').setAttribute('max','{{ maxDate }}')
+</script>
+
+{% if inValid %}
+    <h3>Invalid date, make sure it's before or on the date at home screen that can be accessed by the home button on top </h3>
+{% endif %}
+
+{% endblock midbody %}
+
+{% block workout_table %}
+{% if oneDateLogMD %}
+<h4>here is the log for {{ oneDateLogMD.date }}</h4>
+<h4>Routine: {{ oneDateLogMD.name }}</h4>
+{% if oneDateLogMD.type == "H" %}
+    <h4>Type: Heavy</h4>
+{% endif %}
+{% if oneDateLogMD.type == "V" %}
+    <h4>Type: Volume</h4>
+{% endif %}
+<br>
+<table>
+    <tr>
+        <th>Exercise</th>
+        <th> | </th>
+        <th>Sets</th>
+        <th> | </th>
+        <th>Reps</th>
+        <th> | </th>
+        <th>Weight(lbs)</th>
+    </tr>
+    {% for exercise in oneDateLog %}
+        <tr>
+            <td>{{ exercise.name }}</td>
+            <td></td>
+            <td>{{ exercise.sets }}</td>
+            <td></td>
+            <td>{{ exercise.reps }}</td>
+            <td></td>
+            <td>{{ exercise.weight }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{{ n }}
+{% endblock workout_table %}
