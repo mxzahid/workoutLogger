@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1 style="text-align: center; font-size: 40px;margin-top: 10px;">Add a log</h1>
+<br>
+{% endblock header %}
+
+{% block midbody %}
+
+{% if not success %}
+<form action="/addLog" method="post">
+    <label for="workout">Choose a workout routine:</label>
+    <input list="workoutRoutines" name="workout" id="workout">
+    <datalist id="workoutRoutines">
+      <option value="Chest + Triceps">
+      <option value="Back + Biceps">
+      <option value="Shoulder + Legs">
+    </datalist>
+    <label for="workoutType">Choose the type:</label>
+    <input list="workoutType" name="type" id="type">
+    <datalist id="workoutType">
+      <option value="Heavy">
+      <option value="Volume">
+    </datalist>
+    <label for="logDate">Date:</label>
+    <input type="date" name="logDate" id="logDate">
+    <input type="submit" value="Add Workout">
+  </form>
+
+  <script>
+      let d = new Date();
+      let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+      document.getElementById('logDate').value = datestring;
+  </script>
+{% endif %}
+
+{% if recentlyAddedLog %}
+<h4>here's what you recently added</h4>
+<h5>add sets, reps,weight used to complete</h5>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Exercise</th>
+            <th>Sets</th>
+            <th>Reps</th>
+            <th>Weight(lbs)</th>
+        </tr>
+    </thead>
+    <form action="/addSetsReps" method="post">
+    {% for exercise in recentlyAddedLog %}
+        <tr>
+            <td>{{ exercise.name }}</td>
+            <td>
+                <input type="number" name="sets" style="width: 2.8em;"
+                id="sets" value="{{ exercise. sets }}">
+            </td>
+            <td><input type="number" name="reps" style="width: 2.8em;"
+                id="reps" value="{{ exercise.reps }}"></td>
+            <td><input type="number" name="weight" style="width: 2.8em;"
+                id="weight"></td>
+        </tr>
+    {% endfor %}
+    <input type="submit" value="complete" class="btn btn-primary">
+    </form>
+</table>
+
+{% endif %}
+
+
+{% if success %}
+
+<h1>Success!! </h1>
+<h3>click <a href="/addLog">here</a> to add another!</h3>
+
+
+{% endif %}
+
+
+
+{% endblock midbody %}

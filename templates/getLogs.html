@@ -1,13 +1,8 @@
 {% extends "base.html" %}
 
 {% block header %}
-<br>
-<a href="/">
-    <button type="button" class="btn btn-primary">Home</button>
-</a><br>
-<br>
-<h2>Check out my workouts</h2>
 
+<h1 style="text-align: center; font-size: 40px;margin-top: 10px;">My workout logs</h1>
 {% endblock header %}
 
 {% block midbody %}
@@ -54,6 +49,7 @@
 {% endblock midbody %}
 
 {% block workout_table %}
+
 {% if oneDateLogMD %}
 <h4>here is the log for {{ oneDateLogMD.date }}</h4>
 <h4>Routine: {{ oneDateLogMD.name }}</h4>
@@ -64,29 +60,61 @@
     <h4>Type: Volume</h4>
 {% endif %}
 <br>
-<table>
-    <tr>
-        <th>Exercise</th>
-        <th> | </th>
-        <th>Sets</th>
-        <th> | </th>
-        <th>Reps</th>
-        <th> | </th>
-        <th>Weight(lbs)</th>
-    </tr>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Exercise</th>
+            <th scope="col">Sets</th>
+            <th scope="col">Reps</th>
+        </tr>
+    </thead>
     {% for exercise in oneDateLog %}
         <tr>
             <td>{{ exercise.name }}</td>
-            <td></td>
             <td>{{ exercise.sets }}</td>
-            <td></td>
             <td>{{ exercise.reps }}</td>
-            <td></td>
             <td>{{ exercise.weight }}</td>
         </tr>
     {% endfor %}
 </table>
 {% endif %}
 
-{{ n }}
+{% if nLogs and nLogsMD %}
+{% for i in range(n)%}
+    <h4>Date: {{ nLogsMD[i].date }}</h4>
+    <h4>Routine: {{ nLogsMD[i].name }}</h4>
+    {% if nLogsMD[i].type == "H" %}
+        <h4>Type: Heavy</h4>
+    {% endif %}
+    {% if nLogsMD[i].type == "V" %}
+        <h4>Type: Volume</h4>
+    {% endif %}
+    <br>
+
+    <<table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Exercise</th>
+                <th scope="col">Sets</th>
+                <th scope="col">Reps</th>
+                <th scope="col">Weight</th>
+            </tr>
+        </thead>
+        {% for exercise in nLogs[i] %}
+            <tr>
+                <td>{{ exercise.name }}</td>
+                <td>{{ exercise.sets }}</td>
+                <td>{{ exercise.reps }}</td>
+                <td>{{ exercise.weight }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endfor %}
+{% endif %}
+
+
+
+
+
+
 {% endblock workout_table %}

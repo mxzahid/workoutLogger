@@ -66,14 +66,12 @@ SELECT * from daily_logs;
 
 -- insert all exercises for routine w/ default reps
 DELIMITER $$
-CREATE PROCEDURE proc()
+CREATE PROCEDURE proc(IN r_id INT)
 BEGIN
 
 DECLARE counter INT;
 DECLARE maxId INT;
 DECLARE r_d_id INT;
-DECLARE r_id INT;
-SET r_id=4;
 SET r_d_id=(SELECT daily_logs.routine_date_id FROM  daily_logs WHERE daily_logs.routine_id=r_id);
 
 SET counter = (SELECT MIN(routine_exercises.routine_exercise_id) FROM routine_exercises where routine_id=r_id);

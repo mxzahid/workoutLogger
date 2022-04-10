@@ -1,19 +1,21 @@
 {% extends "base.html "%}
 
 {% block header %}
-<br>
-<a href="/">
-    <button type="button" class="btn btn-primary">Home</button>
-</a><br>
-<br>
 <h2>Here are all my routines: </h2><br>
+<br>
+<button class="btn btn-primary">Add a routine</button>
+
 {% endblock header %}
 
 {% block workout_table %}
 {% for routine in routines%}
+<br>
+<br>
+<br>
 <div>
     <h2 style="text-align: center;
-               background-color: aqua;                     "> 
+               background-color: black;
+               color: white;                     "> 
         {{ routine[0] }}
 
     {% if routine[1] == "H" %}
