@@ -1,30 +1,50 @@
 {% extends "base.html" %}
 
 {% block header %}
-<h1 style="text-align: center; font-size: 40px;margin-top: 10px;">Add a log</h1>
-<br>
+<form action="/logout" style="text-align:right">
+    <button name="logout" type="submit" class="btn btn-secondary">Logout</button>
+</form>
+<div class="jumbotron bg-transparent " style="text-align:center; margin-top: -3%;margin-bottom: -3%;">
+    <h1 class="display-1">Welcome!</h1>
+    <h1 class="display-4">Add a log</h1>
+    <br>
+</div>
+
+
 {% endblock header %}
 
 {% block midbody %}
 
-{% if not success %}
+{% if not success and not added %}
 <form action="/addLog" method="post">
-    <label for="workout">Choose a workout routine:</label>
-    <input list="workoutRoutines" name="workout" id="workout">
-    <datalist id="workoutRoutines">
-      <option value="Chest + Triceps">
-      <option value="Back + Biceps">
-      <option value="Shoulder + Legs">
-    </datalist>
-    <label for="workoutType">Choose the type:</label>
+    <div class="add-log">
+    <div class="add-log-field">
+        <label for="workout">Pick a routine: </label>
+        <input list="workoutRoutines" name="workout" id="workout">
+        <datalist id="workoutRoutines">
+            <option value="Chest + Triceps">
+            <option value="Back + Biceps">
+            <option value="Shoulder + Legs">
+        </datalist>
+    </div>
+    <br>
+    <div class="add-log-field">
+        <label for="workoutType">Pick the type: </label>
     <input list="workoutType" name="type" id="type">
     <datalist id="workoutType">
       <option value="Heavy">
       <option value="Volume">
     </datalist>
-    <label for="logDate">Date:</label>
-    <input type="date" name="logDate" id="logDate">
-    <input type="submit" value="Add Workout">
+    </div>
+    <br>
+    <div class="add-log-field">
+        <label for="logDate">Date: </label>
+        <input type="date" name="logDate" id="logDate">
+    </div>
+    <div class="add-log-button">
+        <input class="btn btn-secondary" type="submit" value="Add">
+    </div>
+    </div>
   </form>
 
   <script>
@@ -32,6 +52,12 @@
       let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
       document.getElementById('logDate').value = datestring;
   </script>
+{% endif %}
+
+{% if missingMessage %}
+
+<h3 class="error-message">*{{ missingMessage }}</h3>
+
 {% endif %}
 
 {% if recentlyAddedLog %}
@@ -72,8 +98,6 @@
 
 <h1>Success!! </h1>
 <h3>click <a href="/addLog">here</a> to add another!</h3>
-
-
 {% endif %}
 
 

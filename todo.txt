@@ -31,15 +31,19 @@ DATABASE:
 
 
 BACKEND
-    (remember to delete all trailing (last) "S" in exercise names, remove)
     
     1) figure out routes:
-        i) get all workout_routines w/ exercises
-        ii) get specific logs, or recent 3
-        iii) create new workout_routines w/ exercises
-        iv) add new logs
-        v) add new exercises
-        vi) edit existing routines (?)
+       // i) get all workout_routines w/ exercises
+        //ii) get specific logs, or recent 3
+        iii) create new workout_routines w/ exercises - drag and drop/pick and choose type
+                -- add new exercises
+        //iv) add new logs
+         -- if log exists for the same date, not allowed (both by DB and backend)
+         -- edit an existing log?
+        
+        v) edit existing routines
+
+        vi) add login authentication
 
     2)
 
@@ -49,3 +53,8 @@ BACKEND
 
 
 FRONTEND
+    1) grid image for routines -- pop up into Tables
+    
+    put both in accordian?:
+        2) get log by date, pick from big calendar, popup when date clicked
+        3) accordian for n logs requested

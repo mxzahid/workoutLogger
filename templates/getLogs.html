@@ -1,120 +1,238 @@
 {% extends "base.html" %}
 
 {% block header %}
+{% if displayGetLogOptions %}
+<div class="jumbotron bg-transparent " style="text-align:center; margin-top: -3%;margin-bottom: -3%;">
+    <h1 class="display-2">Logs</h1>
+    <br>
+    <p style="font-size: 1.7em;">Click <a href="https://abdullahzahid.me/contact" target="_blank">here</a> for questions
+        & comments!</p>
+</div>
+{% endif %}
 
-<h1 style="text-align: center; font-size: 40px;margin-top: 10px;">My workout logs</h1>
 {% endblock header %}
 
 {% block midbody %}
 
 
-<div style='float:left'>
-    <form action="/logsByDate" method="post" >
-        <label for="oneLogDate">Get Log by Date:</label><br>
-        <input type="date" 
-            id="specificLogDate" 
-            name="oneLogDate" 
-            min="2022-03-23"
-            max=""
-            value=""><br>
-        <input type="submit" value="getLogs" class="btn btn-primary">
+{% if displayGetLogOptions %}
+<div class="log-button-div">
+    <form action="/getLogs" method="get">
+        <input type="submit" value="Get" class="button-logs"></input>
+    </form>
+    <br>
+    <form action="/addLog" method="get">
+        <input type="submit" value="Add" class="button-logs"></input>
     </form>
 </div>
-
-<div style="width:50%; margin:auto;">
-    <div style="display:inline-block; width:45%;text-align:left;">
-    <form action="/logsByNumber" method="post" >
-        <label for="numberOfLogs">How many logs?(limit 5)</label><br>
-        <input type="text" 
-            id="numberOfLogs" 
-            name="numberOfLogs" 
-            min="1"
-            max="5"
-            value=""><br>
-        <input type="submit" value="getLogs" class="btn btn-primary">
-    </form>
-</div>
-</div>
-
-
-<script>
-    console.log('{{ maxDate }}')
-    document.getElementById('specificLogDate').setAttribute('max','{{ maxDate }}')
-</script>
-
-{% if inValid %}
-    <h3>Invalid date, make sure it's before or on the date at home screen that can be accessed by the home button on top </h3>
 {% endif %}
+
+
+
+{% if getLogs %}
+<div class="jumbotron bg-transparent " style="text-align:center; margin-top: -3%;margin-bottom: -3%;">
+    <h1 class="display-2">Get Logs</h1>
+</div>
+<br>
+{% if empty_val_n %}
+<h3 class="error-message"> *Make sure to enter a number for n</h3>
+{% endif %}
+<br>
+<div id="accordion" style="text-align: center;">
+    <div class="card">
+        <div class="card-header collapsed accordion-style accordion-link"  data-toggle="collapse" href="#collapseOne">
+                By Date
+        </div>
+        <div id="collapseOne" class="collapse" data-parent="#accordion">
+            <div class="card-body accordion-body">
+                <form action="/logsByDate" method="post">
+                    <input type="date" id="specificLogDate" name="oneLogDate" min="2022-03-23" max="" value="">
+                    <input type="submit" value="Get" class="btn btn-secondary">
+                </form>
+                <script>
+                    console.log('{{ maxDate }}')
+                    document.getElementById('specificLogDate').setAttribute('max', '{{ maxDate }}')
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header collapsed accordion-style accordion-link"  data-toggle="collapse" href="#collapseThree">
+                By type
+        </div>
+        <div id="collapseThree" class="collapse" data-parent="#accordion">
+            <div class="card-body accordion-body">
+                <form action="/logsByType" method="post">
+                    <label for="routineName">Choose a workout routine:</label>
+                    <input list="name" name="routineName" id="routineName">
+                    <datalist id="name">
+                        <option value="Chest + Triceps">
+                        <option value="Back + Biceps">
+                        <option value="Shoulder + Legs">
+                    </datalist>
+                    <label for="type">Choose the type:</label>
+                    <input list="type" name="routineType" id="routineType">
+                    <datalist id="type">
+                        <option value="Heavy">
+                        <option value="Volume">
+                    </datalist>
+                    <input type="submit" value="Get" class="btn btn-secondary">
+                </form>
+            </div>
+        </div>
+    
+    <div class="card">
+        <div class="card-header collapsed accordion-style accordion-link"  data-toggle="collapse" href="#collapseTwo">
+                By Number(Limit 5)
+        </div>
+        <div id="collapseTwo" class="collapse" data-parent="#accordion">
+            <div class="card-body accordion-body">
+                <form action="/logsByNumber" method="post">
+                    <input type="number" id="numberOfLogs" name="numberOfLogs" min="1" max="5"><br>
+                    <input type="submit" value="Get" class="btn btn-secondary">
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+
+
+
+{% endif %}
+
+{% if missingMessage %}
+
+<h2>{{ missingMessage }} </h2>
+<h3>click <a href="/getLogs">here</a> to search for another one<h3>
+
+{% endif %}
+
 
 {% endblock midbody %}
 
 {% block workout_table %}
 
 {% if oneDateLogMD %}
-<h4>here is the log for {{ oneDateLogMD.date }}</h4>
-<h4>Routine: {{ oneDateLogMD.name }}</h4>
-{% if oneDateLogMD.type == "H" %}
-    <h4>Type: Heavy</h4>
-{% endif %}
-{% if oneDateLogMD.type == "V" %}
-    <h4>Type: Volume</h4>
-{% endif %}
-<br>
-<table class="table table-bordered">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Exercise</th>
-            <th scope="col">Sets</th>
-            <th scope="col">Reps</th>
-        </tr>
-    </thead>
-    {% for exercise in oneDateLog %}
-        <tr>
-            <td>{{ exercise.name }}</td>
-            <td>{{ exercise.sets }}</td>
-            <td>{{ exercise.reps }}</td>
-            <td>{{ exercise.weight }}</td>
-        </tr>
-    {% endfor %}
-</table>
-{% endif %}
-
-{% if nLogs and nLogsMD %}
-{% for i in range(n)%}
-    <h4>Date: {{ nLogsMD[i].date }}</h4>
-    <h4>Routine: {{ nLogsMD[i].name }}</h4>
-    {% if nLogsMD[i].type == "H" %}
-        <h4>Type: Heavy</h4>
-    {% endif %}
-    {% if nLogsMD[i].type == "V" %}
-        <h4>Type: Volume</h4>
-    {% endif %}
-    <br>
-
-    <<table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Exercise</th>
-                <th scope="col">Sets</th>
-                <th scope="col">Reps</th>
-                <th scope="col">Weight</th>
-            </tr>
-        </thead>
-        {% for exercise in nLogs[i] %}
+        <div class="get-log-table">
+        <div class="log-table-md jumbotron bg-transparent">
+            <h3 class="display-4">Here is the log for <div id="month"></div></h3>
+            <br>
+            <script src="{{ url_for('static', filename='js/dateFormatter.js') }}" date="{{oneDateLogMD.date}}" monthTag="month">
+            </script>
+            <p style="font-size: 1.7em;">( Routine: {{ oneDateLogMD.name }} - 
+                {% if oneDateLogMD.type == "H" %}
+                Heavy
+                {% endif %}
+                {% if oneDateLogMD.type == "V" %}
+                Volume
+                {% endif %})
+            </p> 
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Exercise</th>
+                    <th scope="col">Sets</th>
+                    <th scope="col">Reps</th>
+                    <th scope="col">Weight</th>
+                </tr>
+            </thead>
+            {% for exercise in oneDateLog %}
             <tr>
                 <td>{{ exercise.name }}</td>
                 <td>{{ exercise.sets }}</td>
                 <td>{{ exercise.reps }}</td>
                 <td>{{ exercise.weight }}</td>
             </tr>
-        {% endfor %}
-    </table>
-{% endfor %}
+            {% endfor %}
+        </table>
+        </div>
 {% endif %}
 
+{% if nLogs and nLogsMD %}
+        <br>
+        <br>
+        <div id="accordion" style="text-align: center;">
+            <div class="card">
+                {% for i in range(n)%}
+
+                <div class="card-header collapsed accordion-style accordion-link" data-toggle="collapse" data-target="#collapse_{{i}}">
+                    Date: {{ nLogsMD[i].date }}
+                    Routine: {{ nLogsMD[i].name }} - 
+                    {% if nLogsMD[i].type == "H" %}
+                    Heavy
+                    {% endif %}
+                    {% if nLogsMD[i].type == "V" %}
+                    Volume
+                    {% endif %}
+                </div>
+                <div id="collapse_{{i}}" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Exercise</th>
+                                    <th scope="col">Sets</th>
+                                    <th scope="col">Reps</th>
+                                    <th scope="col">Weight</th>
+                                </tr>
+                            </thead>
+                            {% for exercise in nLogs[i] %}
+                            <tr>
+                                <td>{{ exercise.name }}</td>
+                                <td>{{ exercise.sets }}</td>
+                                <td>{{ exercise.reps }}</td>
+                                <td>{{ exercise.weight }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <br style="background-color: transparent;">
+                {% endfor %}
+            </div>
+        </div>
+
+        {% endif %}
 
 
+        {% if typeLog and typeLogMD %}
+        <div class="log-table-md jumbotron bg-transparent">
+            <p class="display-4">Here is the latest log for: </p>
+            <p class="display-4">{{ typeLogMD.name }} - 
+                {% if typeLogMD.type == "H" %}
+                Heavy
+                {% endif %}
+                {% if typeLogMD.type == "V" %}
+                Volume
+                {% endif %}
+            </p> 
+            <p class="display-4">on</p>
+            <div class="display-4" id="month"></div>
+            <br>
+            <script src="{{ url_for('static', filename='js/dateFormatter.js') }}" date="{{typeLogMD.date}}" monthTag="month">
+            </script>
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Exercise</th>
+                    <th scope="col">Sets</th>
+                    <th scope="col">Reps</th>
+                    <th scope="col">Weight</th>
+                </tr>
+            </thead>
+            {% for exercise in typeLog %}
+            <tr>
+                <td>{{ exercise.name }}</td>
+                <td>{{ exercise.sets }}</td>
+                <td>{{ exercise.reps }}</td>
+                <td>{{ exercise.weight }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
 
-
-
-{% endblock workout_table %}
+        {% endblock workout_table %}

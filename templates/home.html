@@ -1,21 +1,17 @@
 {% extends "base.html" %}
 
 {% block header %}
-<h2>Here's my latest workout: </h2><br>
+<div class="jumbotron bg-transparent" style="text-align:center; margin-top: -3%;margin-bottom: -3%;">
+    <h1 class="display-2" >World of Workouts</h1>
+    <br>
+    <p style="font-size: 1.7em;">A repository of my workout logs, routines, and more</p> 
+</div>
 {% endblock header %}
 
 {% block workout_table %}
-
-
-<h4>Date: {{ routineMD.date }}</h4>
-<h4>Routine: {{ routineMD.name }}</h4>
-{% if routineMD.type == "H" %}
-    <h4>Type: Heavy</h4>
-{% endif %}
-{% if routineMD.type == "V" %}
-    <h4>Type: Volume</h4>
-{% endif %}
-<br>
+<h3 style="font-size: 2em; font-weight: 200;text-align: center;">Below is my latest session on <div id="month"></div></h3>
+<script src="{{ url_for('static', filename='js/dateFormatter.js') }}" date="{{routineMD.date}}" monthTag="month">
+</script>
 <table class="table table-bordered">
     <thead class="thead-dark">
         <tr>

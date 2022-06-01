@@ -1,50 +1,77 @@
 {% extends "base.html "%}
 
 {% block header %}
-<h2>Here are all my routines: </h2><br>
+<div 
+style="text-align: center; ">
+<h1 class="jumbotron bg-transparent display-4" style=" margin-bottom: -5%; margin-top: -5%; font-size:6.25em;">Routines</h1>
 <br>
-<button class="btn btn-primary">Add a routine</button>
+<!-- <button class="btn btn-dark">Click To Add a Routine</button> -->
 
+</div>
+<br>
 {% endblock header %}
 
 {% block workout_table %}
-{% for routine in routines%}
-<br>
-<br>
-<br>
-<div>
-    <h2 style="text-align: center;
-               background-color: black;
-               color: white;                     "> 
-        {{ routine[0] }}
 
-    {% if routine[1] == "H" %}
-        - Heavy
-    {% endif %}
-    {% if routine[1] == "V" %}
-        - Volume
-    {% endif %}
-        
-    </h2>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Exercise</th>
-                <th scope="col">Sets</th>
-                <th scope="col">Reps</th>
-            </tr>
-        </thead>
-        {% for exercise in routines[routine] %}
-        <tr>
-            <td>{{ exercise[0] }}</td>
-            <td>{{ exercise[1] }}</td>
-            <td>{{ exercise[2] }}</td>
-        </tr>
-        {% endfor %}
-        
-    </table>
-    <br>
-</div>
+
+<div class="row justify-content-center" style="text-align:center;">
+
     
+{% for routine in routines %}
+
+{% set routineName = routine[0] + '-' + routine[1] %}
+<a data-toggle="modal" data-target="#E_{{ loop.index }}">
+    <div class="align-items-center">
+        <img 
+        class="col-mid img-fluid rounded-corners mx-auto "
+        style="height:18em;max-height: 20em;width: 25em;"
+        src="{{ pics[routineName] }}">
+            <h2 style="margin-top:-70%; padding-bottom: 50%; color: white; " >
+                {{ routine[0] }}
+                {% if routine[1] == "H" %}
+                    Heavy
+                {% endif %}
+                {% if routine[1] == "V" %}
+                    Volume
+                {% endif %}    
+            </h2>
+        
+    </div>
+</a>
+
+<div class="modal fade" id="E_{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- <div class="modal-header"> -->
+          <h5 class="display-4" id="exampleModalLabel">{{ routine[0] }}
+            {% if routine[1] == "H" %}
+                - Heavy
+            {% endif %}
+            {% if routine[1] == "V" %}
+                - Volume
+            {% endif %}</h5>
+        <!-- </div> -->
+        <div class="modal-body">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Exercise</th>
+                        <th scope="col">Sets</th>
+                        <th scope="col">Reps</th>
+                    </tr>
+                </thead>
+                {% for exercise in routines[routine] %}
+                <tr>
+                    <td>{{ exercise[0] }}</td>
+                    <td>{{ exercise[1] }}</td>
+                    <td>{{ exercise[2] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+      </div>
+    </div>
+  </div> 
 {% endfor %}
+</div>
 {% endblock workout_table %}

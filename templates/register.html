@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block midbody %}
+<h1 class="display-3" style="text-align: center;margin-bottom:-5%"></h1>
+		<div class="register">
+			<h1>Register</h1>
+			<div class="links">
+				<a href="/login">Login</a>
+				<a href="/register" class="active">Register</a>
+			</div>
+			{% if not success%}
+				<form action="" method="post" autocomplete="off">
+					<input type="text" name="username" placeholder="Username" id="username" required>
+					<input type="password" name="password" placeholder="Password" id="password" required>
+					<input type="email" name="email" placeholder="Email" id="email" required>
+					<div style="padding-left: 5%; padding-right:5%">
+						<p>*Username must be less than 20 characters</p>
+						<p>**Password 8-character minimum, with numbers and symbols</p>
+						<p style="color: red;">{{ message }}</p>
+					</div>
+					<input type="submit" value="Register">
+				</form>
+			{% endif %}
+			{% if success %}
+				<h1 class="display-3">Success! <a href = "/login">Log in</a> now.</h1>
+			{% endif %}
+                
+                
+			
+		</div>
+{% endblock midbody %}
